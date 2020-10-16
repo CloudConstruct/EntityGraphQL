@@ -59,13 +59,13 @@ namespace EntityGraphQL.Compiler
                     currentExpressionContext = expContext;
                     var select = ParseFieldSelect(expContext, actualFieldName, context.select);
                     currentExpressionContext = oldContext;
-                    return new GraphQLMutationNode(mutationType, args, (GraphQLQueryNode)select);
+                    return new GraphQLMutationNode(mutationType, args, (GraphQLQueryNode)select, schemaProvider.SchemaFieldNamer);
                 }
                 else
                 {
                     var resultName = alias ?? actualFieldName;
 
-                    return new GraphQLMutationNode(mutationType, args, null);
+                    return new GraphQLMutationNode(mutationType, args, null, schemaProvider.SchemaFieldNamer);
                 }
             }
             else
@@ -177,6 +177,10 @@ namespace EntityGraphQL.Compiler
             if (context.gqlVar() != null)
             {
                 string varKey = context.gqlVar().GetText().TrimStart('$');
+                if (variables == null)
+                {
+                    throw new EntityGraphQLCompilerException($"Missing variable {varKey}");
+                }
                 object value = variables.GetValueFor(varKey);
                 gqlVarValue = (ExpressionResult)Expression.Constant(value);
             }

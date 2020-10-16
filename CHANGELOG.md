@@ -1,3 +1,13 @@
+# 0.68.0
+- Fix issue where `FieldNamer` was not being consistently used. Thanks @AnderssonPeter
+- Make sure we include inner exceptions on errors. Thanks @AnderssonPeter
+
+# 0.67.0
+- As per GraphQL spec commas are optional (previously EntityGraphQL expected them in field/mutation arguments)
+
+*Breaking changes*
+- errors property on query result should not be present on the response if there are no errors per the graphQL specification.
+
 # 0.66.1
 - Fix bug with using `WithService()` when you require the schema context service again to create a link between services
 

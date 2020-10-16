@@ -83,7 +83,7 @@ namespace EntityGraphQL.Schema
         public Field AddField<TReturn>(Expression<Func<TBaseType, TReturn>> fieldSelection, string description, string returnSchemaType = null)
         {
             var exp = ExpressionUtil.CheckAndGetMemberExpression(fieldSelection);
-            return AddField(SchemaGenerator.ToCamelCaseStartsLower(exp.Member.Name), fieldSelection, description, returnSchemaType);
+            return AddField(schema.SchemaFieldNamer(exp.Member.Name), fieldSelection, description, returnSchemaType);
         }
 
         public Field AddField(Field field)
@@ -220,7 +220,7 @@ namespace EntityGraphQL.Schema
         public Field GetField(Expression<Func<TBaseType, object>> fieldSelection, ClaimsIdentity claims = null)
         {
             var exp = ExpressionUtil.CheckAndGetMemberExpression(fieldSelection);
-            return GetField(SchemaGenerator.ToCamelCaseStartsLower(exp.Member.Name), claims);
+            return GetField(schema.SchemaFieldNamer(exp.Member.Name), claims);
         }
 
         public IEnumerable<Field> GetFields()
@@ -251,7 +251,7 @@ namespace EntityGraphQL.Schema
         public void RemoveField(Expression<Func<TBaseType, object>> fieldSelection)
         {
             var exp = ExpressionUtil.CheckAndGetMemberExpression(fieldSelection);
-            RemoveField(SchemaGenerator.ToCamelCaseStartsLower(exp.Member.Name));
+            RemoveField(schema.SchemaFieldNamer(exp.Member.Name));
         }
 
         /// <summary>
