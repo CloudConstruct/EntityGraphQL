@@ -73,9 +73,20 @@ namespace EntityGraphQL.Compiler.Util
             else if (type != typeof(long) && objType == typeof(long))
             {
                 if (type == typeof(DateTime) || type == typeof(Nullable<DateTime>))
-                    return new DateTime((long)value);
+                    return new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        .AddMilliseconds((long)value);
                 if (type == typeof(DateTimeOffset) || type == typeof(Nullable<DateTimeOffset>))
-                    return new DateTimeOffset((long)value, TimeSpan.Zero);
+                    return DateTimeOffset.FromUnixTimeMilliseconds((long)value);
+            }
+            else if (type != typeof(ulong) && objType == typeof(ulong))
+            {
+                if (type == typeof(DateTime) || type == typeof(Nullable<DateTime>))
+                {
+                    return new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        .AddMilliseconds((ulong)value);
+                }
+                if (type == typeof(DateTimeOffset) || type == typeof(Nullable<DateTimeOffset>))
+                    return DateTimeOffset.FromUnixTimeMilliseconds(Convert.ToInt64(value));
             }
 
             var argumentNonNullType = type.IsNullableType() ? Nullable.GetUnderlyingType(type) : type;
