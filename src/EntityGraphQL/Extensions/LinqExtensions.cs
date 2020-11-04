@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -31,6 +31,14 @@ namespace EntityGraphQL.Extensions
                 return source;
 
             return Queryable.Take(source, count.Value);
+        }
+
+        public static IQueryable<TSource> Skip<TSource>(this IQueryable<TSource> source, int? count)
+        {
+            if (!count.HasValue)
+                return source;
+
+            return Queryable.Skip(source, count.Value);
         }
 
         /// <summary>

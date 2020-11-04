@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -175,13 +175,27 @@ namespace EntityGraphQL.Compiler
             else if (right.Type.IsNullableType() && !left.Type.IsNullableType())
                 left = (ExpressionResult)Expression.Convert(left, right.Type);
 
-            else if (left.Type == typeof(int) && (right.Type == typeof(uint) || right.Type == typeof(Int16) || right.Type == typeof(Int64) || right.Type == typeof(UInt16) || right.Type == typeof(UInt64)))
+            else if (left.Type == typeof(int) && 
+                (right.Type == typeof(uint) || 
+                    right.Type == typeof(short) || 
+                    right.Type == typeof(long) || 
+                    right.Type == typeof(ushort) || 
+                    right.Type == typeof(ulong)))
                 right = (ExpressionResult)Expression.Convert(right, left.Type);
-            else if (left.Type == typeof(uint) && (right.Type == typeof(int) || right.Type == typeof(Int16) || right.Type == typeof(Int64) || right.Type == typeof(UInt16) || right.Type == typeof(UInt64)))
+            else if (left.Type == typeof(uint) && 
+                (right.Type == typeof(int) || 
+                    right.Type == typeof(short) || 
+                    right.Type == typeof(long) || 
+                    right.Type == typeof(ushort) || 
+                    right.Type == typeof(ulong)))
                 left = (ExpressionResult)Expression.Convert(left, right.Type);
+
+            //TODO: Handle shorts and longs as left types
 
             return (ExpressionResult)Expression.MakeBinary(op, left, right);
         }
+
+
 
         private Expression CheckConditionalTest(Expression test)
         {
